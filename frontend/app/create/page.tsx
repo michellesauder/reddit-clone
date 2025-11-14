@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { postsApi } from '@/lib/api';
-import { auth } from '@/lib/auth';
-import Link from 'next/link';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { postsApi } from "@/lib/api";
+import { auth } from "@/lib/auth";
+import Link from "next/link";
 
 export default function CreatePostPage() {
   const router = useRouter();
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [link, setLink] = useState('');
-  const [postType, setPostType] = useState<'text' | 'link'>('text');
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [link, setLink] = useState("");
+  const [postType, setPostType] = useState<"text" | "link">("text");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   // Redirect if not authenticated
   useEffect(() => {
     if (!auth.isAuthenticated()) {
-      router.push('/login');
+      router.push("/login");
     }
   }, [router]);
 
@@ -27,26 +27,26 @@ export default function CreatePostPage() {
     setError(null);
 
     if (!title.trim()) {
-      setError('Title is required');
+      setError("Title is required");
       return;
     }
 
-    if (postType === 'text' && !content.trim()) {
-      setError('Content is required for text posts');
+    if (postType === "text" && !content.trim()) {
+      setError("Content is required for text posts");
       return;
     }
 
-    if (postType === 'link' && !link.trim()) {
-      setError('Link is required for link posts');
+    if (postType === "link" && !link.trim()) {
+      setError("Link is required for link posts");
       return;
     }
 
     // Basic URL validation
-    if (postType === 'link' && link.trim()) {
+    if (postType === "link" && link.trim()) {
       try {
         new URL(link);
       } catch {
-        setError('Please enter a valid URL (e.g., https://example.com)');
+        setError("Please enter a valid URL (e.g., https://example.com)");
         return;
       }
     }
@@ -56,15 +56,19 @@ export default function CreatePostPage() {
     try {
       const postData = await postsApi.create(
         title.trim(),
-        postType === 'text' ? content.trim() : undefined,
-        postType === 'link' ? link.trim() : undefined
+        postType === "text" ? content.trim() : undefined,
+        postType === "link" ? link.trim() : undefined
       );
 
       // Redirect to the new post
       router.push(`/posts/${postData.id}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create post. Please try again.');
-      console.error('Create post error:', err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to create post. Please try again."
+      );
+      console.error("Create post error:", err);
     } finally {
       setLoading(false);
     }
@@ -75,7 +79,10 @@ export default function CreatePostPage() {
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-2xl font-bold text-gray-900 hover:text-blue-600">
+          <Link
+            href="/"
+            className="text-2xl font-bold text-gray-900 hover:text-blue-600"
+          >
             Reddit Clone
           </Link>
           <Link
@@ -90,7 +97,9 @@ export default function CreatePostPage() {
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">Create a post</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">
+            Create a post
+          </h1>
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
@@ -108,13 +117,13 @@ export default function CreatePostPage() {
                 <button
                   type="button"
                   onClick={() => {
-                    setPostType('text');
-                    setLink('');
+                    setPostType("text");
+                    setLink("");
                   }}
                   className={`px-4 py-2 rounded-md ${
-                    postType === 'text'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    postType === "text"
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}
                 >
                   Text Post
@@ -122,13 +131,13 @@ export default function CreatePostPage() {
                 <button
                   type="button"
                   onClick={() => {
-                    setPostType('link');
-                    setContent('');
+                    setPostType("link");
+                    setContent("");
                   }}
                   className={`px-4 py-2 rounded-md ${
-                    postType === 'link'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    postType === "link"
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}
                 >
                   Link Post
@@ -138,7 +147,10 @@ export default function CreatePostPage() {
 
             {/* Title */}
             <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="title"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Title *
               </label>
               <input
@@ -154,9 +166,12 @@ export default function CreatePostPage() {
             </div>
 
             {/* Content (for text posts) */}
-            {postType === 'text' && (
+            {postType === "text" && (
               <div>
-                <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="content"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Content *
                 </label>
                 <textarea
@@ -172,9 +187,12 @@ export default function CreatePostPage() {
             )}
 
             {/* Link (for link posts) */}
-            {postType === 'link' && (
+            {postType === "link" && (
               <div>
-                <label htmlFor="link" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="link"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   URL *
                 </label>
                 <input
@@ -199,7 +217,7 @@ export default function CreatePostPage() {
                 disabled={loading}
                 className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Posting...' : 'Post'}
+                {loading ? "Posting..." : "Post"}
               </button>
               <Link
                 href="/"
