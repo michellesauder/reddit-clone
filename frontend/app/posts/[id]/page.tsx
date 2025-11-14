@@ -156,6 +156,8 @@ export default function PostDetailPage() {
                 autoFocus
                 spellCheck={false}
                 autoComplete="off"
+                dir="ltr"
+                style={{ direction: "ltr", textAlign: "left" }}
               />
               <div className="flex gap-2 mt-2">
                 <button
